@@ -566,6 +566,11 @@ final class tx_overlays {
 							}
 								// Return the overlaid recordset
 							return $overlaidRecordset;
+
+						// The foreign table definition is incomplete, don't perform overlays and
+						// return recordset as is
+						} else {
+							return $recordset;
 						}
 
 						// The foreign table has no TCA definition, it's impossible to perform overlays
