@@ -137,6 +137,32 @@ final class tx_overlays {
 	}
 
 	/**
+	 * Retrieves a single record from the given table, properly overlaid for version and language.
+	 *
+	 * NOTE: this method first collects all records and then returns the first one, which makes it possible
+	 * to filter out records which may not have a translation, for example. However this is not perfect as the
+	 * sorting is still done on the SQL side, so that the first record in a translated language may not be correct
+	 * for alphabetical ordering. A sorting on the PHP side could be included in the future, similar to what is
+	 * done class tx_dataquery_wrapper (EXT:dataquery).
+	 *
+	 * @param string $selectFields List of fields to select from the table. This is what comes right after "SELECT ...". Required value.
+	 * @param string $fromTable Table from which to select. This is what comes right after "FROM ...". Required value.
+	 * @param string $whereClause Optional additional WHERE clauses put in the end of the query. NOTICE: You must escape values in this argument with $this->fullQuoteStr() yourself! DO NOT PUT IN GROUP BY, ORDER BY or LIMIT!
+	 * @param string $groupBy Optional GROUP BY field(s), if none, supply blank string.
+	 * @param string $orderBy Optional ORDER BY field(s), if none, supply blank string.
+	 * @return array
+	 * @throws Exception
+	 */
+	public static function getSingleRecordForTable($selectFields, $fromTable, $whereClause = '', $groupBy = '', $orderBy = '') {
+		$records = self::getAllRecordsForTable($selectFields, $fromTable, $whereClause, $groupBy, $orderBy);
+		if (count($records) > 0) {
+			return array_shift($records);
+		} else {
+			throw new \Exception('No record found', 1397483854);
+		}
+	}
+
+	/**
 	 * This method gets the SQL condition to apply for fetching the proper language
 	 * depending on the localization settings in the TCA
 	 *
