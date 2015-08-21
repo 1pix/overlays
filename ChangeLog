@@ -1,3 +1,7 @@
+2015-08-21 Francois Suter (Cobweb)  <typo3@cobweb.ch>
+
+	* Moved to namespaces, verified compatibility with TYPO3 CMS 7, resolves #69244
+
 2014-05-09 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* Added method for returning a single record, resolves #56087

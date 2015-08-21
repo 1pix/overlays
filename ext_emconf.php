@@ -27,22 +27,22 @@ $EM_CONF[$_EXTKEY] = array (
   'clearCacheOnLoad' => 0,
   'lockType' => '',
   'author_company' => '',
-  'version' => '2.3.0',
-  'constraints' => 
+  'version' => '3.0.0-dev',
+  'constraints' =>
   array (
-    'depends' => 
+    'depends' =>
     array (
-      'typo3' => '4.5.0-6.2.99',
+      'typo3' => '6.2.0-7.4.99',
     ),
-    'conflicts' => 
+    'conflicts' =>
     array (
     ),
-    'suggests' => 
+    'suggests' =>
     array (
     ),
   ),
   '_md5_values_when_last_written' => 'a:7:{s:9:"ChangeLog";s:4:"6aac";s:21:"class.tx_overlays.php";s:4:"192f";s:16:"ext_autoload.php";s:4:"ad6d";s:12:"ext_icon.gif";s:4:"73e0";s:10:"README.txt";s:4:"b729";s:14:"doc/manual.pdf";s:4:"f295";s:14:"doc/manual.sxw";s:4:"622c";}',
-  'suggests' => 
+  'suggests' =>
   array (
   ),
   'comment' => 'Verified compatibility with TYPO3 CMS 6.2; added API for getting single record.',
