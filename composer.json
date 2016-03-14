@@ -1,0 +1,15 @@
+{
+	"name": "cobweb/overlays",
+	"type": "typo3-cms-extension",
+	"description": "A library for bringing into extensions something like TypoScript's getText function.",
+	"license": ["GPL-2.0+"],
+	"autoload": {
+		"psr-4": {
+			"Cobweb\\Overlays\\": "Classes/"
+		}
+	},
+	"replace": {
+		"overlays": "self.version",
+		"typo3-ter/overlays": "self.version"
+	}
+}
