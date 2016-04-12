@@ -1,3 +1,7 @@
+2016-04-12 Francois Suter (Cobweb)  <typo3@cobweb.ch>
+
+	* Released to TER as version 3.0.0, resolves #75534
+
 2015-08-21 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* Moved to namespaces, verified compatibility with TYPO3 CMS 7, resolves #69244
