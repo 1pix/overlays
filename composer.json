@@ -1,12 +1,24 @@
 {
 	"name": "cobweb/overlays",
 	"type": "typo3-cms-extension",
-	"description": "A library for bringing into extensions something like TypoScript's getText function.",
-	"license": ["GPL-2.0+"],
+	"description": "This extension provides an easy to use API for retrieving properly localized records. It also takes care of keeping the DB calls to a minimum.",
+	"license": [
+		"GPL-2.0+"
+	],
+	"authors": [
+		{
+			"name": "Francois Suter",
+			"role": "Developer"
+		}
+	],
 	"autoload": {
 		"psr-4": {
 			"Cobweb\\Overlays\\": "Classes/"
 		}
+	},
+	"version": "3.0.0",
+	"require": {
+		"typo3/cms-core": ">=7.0.0,<8.0"
 	},
 	"replace": {
 		"overlays": "self.version",
