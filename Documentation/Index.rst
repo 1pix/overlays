@@ -28,7 +28,7 @@ Improved overlays
         overlays, language, versioning, api
 
     :Copyright:
-        2008-2016
+        2008-2017
 
     :Author:
         François Suter

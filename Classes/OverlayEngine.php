@@ -17,8 +17,8 @@ namespace Cobweb\Overlays;
 /**
  * Main library of the 'overlays' extension.
  *
- * It aims to improve on the performance of the original overlaying mechanism provided by t3lib_page
- * and to provide a more useful API for developers
+ * It aims to improve on the performance of the original overlaying mechanism provided by \TYPO3\CMS\Frontend\Page\PageRepository
+ * and to provide a more useful API for developers.
  *
  * @author Francois Suter (Cobweb) <typo3@cobweb.ch>
  * @package TYPO3
@@ -31,7 +31,7 @@ final class OverlayEngine
     /**
      * Gets all the records from a given table, properly overlaid with versions and translations.
      *
-     * Its parameters are the same as t3lib_db::exec_SELECTquery().
+     * Its parameters are the same as \TYPO3\CMS\Core\Database\DatabaseConnection::exec_SELECTquery().
      * A small difference is that it will take only a single table.
      * The big difference is that it returns an array of properly overlaid records and not a result pointer.
      *
@@ -149,7 +149,7 @@ final class OverlayEngine
      * to filter out records which may not have a translation, for example. However this is not perfect as the
      * sorting is still done on the SQL side, so that the first record in a translated language may not be correct
      * for alphabetical ordering. A sorting on the PHP side could be included in the future, similar to what is
-     * done class tx_dataquery_wrapper (EXT:dataquery).
+     * done class \Tesseract\Dataquery\Component\DataProvider (EXT:dataquery).
      *
      * @param string $selectFields List of fields to select from the table. This is what comes right after "SELECT ...". Required value.
      * @param string $fromTable Table from which to select. This is what comes right after "FROM ...". Required value.
@@ -220,7 +220,7 @@ final class OverlayEngine
     public static function getEnableFieldsCondition($table, $showHidden = false, $ignoreArray = array())
     {
         try {
-            $showHidden = $showHidden ? $showHidden : ($table == 'pages' ? $GLOBALS['TSFE']->showHiddenPage : $GLOBALS['TSFE']->showHiddenRecords);
+            $showHidden = $showHidden ? $showHidden : ($table === 'pages' ? $GLOBALS['TSFE']->showHiddenPage : $GLOBALS['TSFE']->showHiddenRecords);
             $enableCondition = $GLOBALS['TSFE']->sys_page->enableFields($table, $showHidden, $ignoreArray);
             // If an enable clause was returned, strip the first ' AND '
             if (!empty($enableCondition)) {
@@ -244,8 +244,7 @@ final class OverlayEngine
      * and not the placeholders. In this case it is desirable to select the overlays directly,
      * which can be achieved by setting $getOverlaysDirectly to TRUE
      *
-     * NOTE: if this all sounds like gibberish, try reading more about workspaces in "Core API"
-     * (there's also quite some stuff in "Inside TYPO3", but part of it is badly outdated)
+     * NOTE: if this all sounds like gibberish, try reading more about workspaces in "Core API" and "Inside TYPO3".
      *
      * @param string $table True name of the table to build the condition for
      * @param string $alias Alias to use for the table instead of its true name
@@ -268,7 +267,7 @@ final class OverlayEngine
 
             // Additional conditions when previewing a workspace
             if ($GLOBALS['TSFE']->sys_page->versioningPreview) {
-                $workspace = intval($GLOBALS['BE_USER']->workspace);
+                $workspace = (int)$GLOBALS['BE_USER']->workspace;
                 // Condition for records that are unmodified but whose parent was modified
                 // (when a parent record is modified, copies of its children are made that refer to the modified parent)
                 $workspaceCondition .= ' OR (' . $alias . '.t3ver_state = 0 AND ' . $alias . '.t3ver_wsid = ' . $workspace . ')';
@@ -323,7 +322,7 @@ final class OverlayEngine
     {
         $select = $selectFields;
         // Don't bother if all fields are selected anyway
-        if ($selectFields != '*') {
+        if ($selectFields !== '*') {
             $hasUidField = false;
             $hasPidField = false;
             // Get the list of fields for the given table
@@ -354,7 +353,7 @@ final class OverlayEngine
      * Makes sure that all the fields necessary for proper overlaying are included
      * in the list of selected fields and exist in the table being queried.
      *
-     * If not, it lets the \Exception thrown by tx_context::selectOverlayFieldsArray() bubble up.
+     * If not, it lets the \Exception thrown by \Cobweb\Overlays\OverlayEngine::selectOverlayFieldsArray() bubble up.
      *
      * @param string $table Table from which to select. This is what comes right after "FROM ...". Required value.
      * @param string $selectFields List of fields to select from the table. This is what comes right after "SELECT ...". Required value.
@@ -387,7 +386,7 @@ final class OverlayEngine
         $additionalFields = array();
 
         // If all fields are selected anyway, no need to worry
-        if ($selectFields != '*') {
+        if ($selectFields !== '*') {
             // Check if the table indeed has a TCA
             if (isset($GLOBALS['TCA'][$table]['ctrl'])) {
 
@@ -424,7 +423,7 @@ final class OverlayEngine
      * Makes sure that all the fields necessary for proper versioning overlays are included
      * in the list of selected fields and exist in the table being queried.
      *
-     * If not, it lets the \Exception thrown by tx_context::selectVersioningFieldsArray() bubble up.
+     * If not, it lets the \Exception thrown by \Cobweb\Overlays\OverlayEngine::selectVersioningFieldsArray() bubble up.
      *
      * @param string $table Table from which to select. This is what comes right after "FROM ...". Required value.
      * @param string $selectFields List of fields to select from the table. This is what comes right after "SELECT ...". Required value.
@@ -457,7 +456,7 @@ final class OverlayEngine
         $additionalFields = array();
 
         // If all fields are selected anyway, no need to worry
-        if ($selectFields != '*') {
+        if ($selectFields !== '*') {
             // Check if the table indeed has a TCA and versioning information
             if (isset($GLOBALS['TCA'][$table]['ctrl']) && !empty($GLOBALS['TCA'][$table]['ctrl']['versioningWS'])) {
 
@@ -555,7 +554,7 @@ final class OverlayEngine
                                     // No overlay exists, apply relevant translation rules
                                 } else {
                                     // Take original record, only if non-translated are not hidden, or if language is [All]
-                                    if ($overlayMode != 'hideNonTranslated' || $row[$tableCtrl['languageField']] == -1) {
+                                    if ($overlayMode !== 'hideNonTranslated' || $row[$tableCtrl['languageField']] == -1) {
                                         $overlaidRecordset[$index] = $row;
                                     }
                                 }
@@ -581,7 +580,7 @@ final class OverlayEngine
                         $foreignCtrl = $GLOBALS['TCA'][$tableCtrl['transForeignTable']]['ctrl'];
                         // Check that the foreign table is indeed the appropriate translation table
                         // and also check that the foreign table has all the necessary TCA definitions
-                        if (!empty($foreignCtrl['transOrigPointerTable']) && $foreignCtrl['transOrigPointerTable'] == $table && !empty($foreignCtrl['transOrigPointerField']) && !empty($foreignCtrl['languageField'])) {
+                        if (!empty($foreignCtrl['transOrigPointerTable']) && $foreignCtrl['transOrigPointerTable'] === $table && !empty($foreignCtrl['transOrigPointerField']) && !empty($foreignCtrl['languageField'])) {
                             // Assemble a list of all uid's of records to translate
                             $uidList = array();
                             foreach ($recordset as $row) {
@@ -603,7 +602,7 @@ final class OverlayEngine
                                     // No overlay exists
                                 } else {
                                     // Take original record, only if non-translated are not hidden
-                                    if ($overlayMode != 'hideNonTranslated') {
+                                    if ($overlayMode !== 'hideNonTranslated') {
                                         $overlaidRecordset[$index] = $row;
                                     }
                                 }
@@ -680,7 +679,7 @@ final class OverlayEngine
         if (is_array($uids) && count($uids) > 0) {
             $tableCtrl = $GLOBALS['TCA'][$table]['ctrl'];
             // Select overlays for all records
-            $where = $tableCtrl['languageField'] . ' = ' . intval($currentLanguage) .
+            $where = $tableCtrl['languageField'] . ' = ' . (int)$currentLanguage .
                     ' AND ' . $tableCtrl['transOrigPointerField'] . ' IN (' . implode(', ', $uids) . ')';
             $enableCondition = self::getEnableFieldsCondition($table);
             if (!empty($enableCondition)) {
@@ -729,7 +728,7 @@ final class OverlayEngine
         if (is_array($uids) && count($uids) > 0) {
             $tableCtrl = $GLOBALS['TCA'][$table]['ctrl'];
             // Select overlays for all records
-            $where = $tableCtrl['languageField'] . ' = ' . intval($currentLanguage) .
+            $where = $tableCtrl['languageField'] . ' = ' . (int)$currentLanguage .
                     ' AND ' . $tableCtrl['transOrigPointerField'] . ' IN (' . implode(', ', $uids) . ')';
             $enableCondition = self::getEnableFieldsCondition($table);
             if (!empty($enableCondition)) {
@@ -772,12 +771,12 @@ final class OverlayEngine
         $overlaidRecord = $record;
         $overlaidRecord['_LOCALIZED_UID'] = $overlay['uid'];
         foreach ($record as $key => $value) {
-            if ($key != 'uid' && $key != 'pid' && isset($overlay[$key])) {
+            if ($key !== 'uid' && $key !== 'pid' && isset($overlay[$key])) {
                 $l10mMode = self::getL10nModeForColumn($table, $key);
                 if (empty($l10mMode)) {
                     $overlaidRecord[$key] = $overlay[$key];
                 } else {
-                    if ($l10mMode != 'exclude' && ($l10mMode != 'mergeIfNotBlank' || strcmp(trim($overlay[$key]),
+                    if ($l10mMode !== 'exclude' && ($l10mMode !== 'mergeIfNotBlank' || strcmp(trim($overlay[$key]),
                                             ''))
                     ) {
                         $overlaidRecord[$key] = $overlay[$key];
