@@ -1,5 +1,5 @@
 {
-	"name": "cobweb/overlays",
+	"name": "1pix/overlays",
 	"type": "typo3-cms-extension",
 	"description": "This extension provides an easy to use API for retrieving properly localized records. It also takes care of keeping the DB calls to a minimum.",
 	"license": [
